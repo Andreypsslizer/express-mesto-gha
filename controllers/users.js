@@ -1,5 +1,5 @@
-const User = require("../models/user")
-const { ERRORS } = require("../utils/constants")
+const User = require('../models/user');
+const { ERRORS } = require('../utils/constants');
 
 const getUsers = (req, res) => {
   User.find({})
@@ -13,14 +13,14 @@ const getUsers = (req, res) => {
 
 const getUser = (req, res) => {
   User.findById(req.params.userId)
-    .orFail(new Error("notValidId"))
+    .orFail(new Error('notValidId'))
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'CastError') {
         res
           .status(ERRORS.ERROR_400.CODE)
           .send({ message: ERRORS.ERROR_400.MESSAGE });
-      } else if (err.message === "notValidId") {
+      } else if (err.message === 'notValidId') {
         res
           .status(ERRORS.ERROR_404.CODE)
           .send({ message: ERRORS.ERROR_404.MESSAGE });
@@ -32,13 +32,12 @@ const getUser = (req, res) => {
     });
 };
 
-
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((newUser) => res.send(newUser))
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         res
           .status(ERRORS.ERROR_400.CODE)
           .send({ message: ERRORS.ERROR_400.MESSAGE });
@@ -62,14 +61,14 @@ const updateUser = (req, res) => {
       runValidators: true,
     },
   )
-    .orFail(new Error("notValidId"))
+    .orFail(new Error('notValidId'))
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         res
           .status(ERRORS.ERROR_400.CODE)
           .send({ message: ERRORS.ERROR_400.MESSAGE });
-      } else if (err.message === "notValidId") {
+      } else if (err.message === 'notValidId') {
         res
           .status(ERRORS.ERROR_404.CODE)
           .send({ message: ERRORS.ERROR_404.MESSAGE });
@@ -93,14 +92,14 @@ const updateUserAvatar = (req, res) => {
       runValidators: true,
     },
   )
-    .orFail(new Error("notValidId"))
+    .orFail(new Error('notValidId'))
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         res
           .status(ERRORS.ERROR_400.CODE)
           .send({ message: ERRORS.ERROR_400.MESSAGE });
-      } else if (err.message === "notValidId") {
+      } else if (err.message === 'notValidId') {
         res
           .status(ERRORS.ERROR_404.CODE)
           .send({ message: ERRORS.ERROR_404.MESSAGE });
@@ -117,5 +116,5 @@ module.exports = {
   getUser,
   createUser,
   updateUser,
-  updateUserAvatar
-}
+  updateUserAvatar,
+};

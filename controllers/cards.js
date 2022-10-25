@@ -1,5 +1,5 @@
-const Card = require("../models/card");
-const { ERRORS } = require("../utils/constants");
+const Card = require('../models/card');
+const { ERRORS } = require('../utils/constants');
 
 const getCards = (req, res) => {
   Card.find({})
@@ -17,7 +17,7 @@ const createCard = (req, res) => {
   Card.create({ name, link, owner })
     .then((newCard) => res.send(newCard))
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         res
           .status(ERRORS.ERROR_400.CODE)
           .send({ message: ERRORS.ERROR_400.MESSAGE });
@@ -31,14 +31,14 @@ const createCard = (req, res) => {
 
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
-    .orFail(new Error("notValidId"))
+    .orFail(new Error('notValidId'))
     .then((card) => res.send(card))
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         res
           .status(ERRORS.ERROR_400.CODE)
           .send({ message: ERRORS.ERROR_400.MESSAGE });
-      } else if (err.message === "notValidId") {
+      } else if (err.message === 'notValidId') {
         res
           .status(ERRORS.ERROR_404.CODE)
           .send({ message: ERRORS.ERROR_404.MESSAGE });
@@ -56,14 +56,14 @@ const likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(new Error("notValidId"))
+    .orFail(new Error('notValidId'))
     .then((card) => res.send(card))
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         res
           .status(ERRORS.ERROR_400.CODE)
           .send({ message: ERRORS.ERROR_400.MESSAGE });
-      } else if (err.message === "notValidId") {
+      } else if (err.message === 'notValidId') {
         res
           .status(ERRORS.ERROR_404.CODE)
           .send({ message: ERRORS.ERROR_404.MESSAGE });
@@ -83,14 +83,14 @@ const dislikeCard = (req, res) => {
     },
     { new: true },
   )
-    .orFail(new Error("notValidId"))
+    .orFail(new Error('notValidId'))
     .then((card) => res.send(card))
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'CastError') {
         res
           .status(ERRORS.ERROR_400.CODE)
           .send({ message: ERRORS.ERROR_400.MESSAGE });
-      } else if (err.message === "notValidId") {
+      } else if (err.message === 'notValidId') {
         res
           .status(ERRORS.ERROR_404.CODE)
           .send({ message: ERRORS.ERROR_404.MESSAGE });

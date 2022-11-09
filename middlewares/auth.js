@@ -3,8 +3,8 @@ const { ERRORS } = require('../utils/constants');
 
 const handleAuthError = (res) => {
   res
-    .status(ERRORS.ERROR_401.CODE)
-    .send({ message: ERRORS.ERROR_401.MESSAGE });
+    .status(ERRORS.ERROR_500.CODE)
+    .send({ message: ERRORS.ERROR_500.MESSAGE });
 };
 
 const auth = (req, res, next) => {

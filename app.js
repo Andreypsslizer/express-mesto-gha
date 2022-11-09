@@ -21,6 +21,7 @@ router.post('/signin', validateLogin, login);
 router.post('/signup', validateCreateUser, createUser);
 router.use('/users', auth, usersRouter);
 router.use('/cards', auth, cardsRouter);
+app.use(router)
 app.use('*', (req, res) => res.status(404).send({ message: '404 — Запрашиваемый ресурс не найден' }));
 
 app.listen(3000, () => {

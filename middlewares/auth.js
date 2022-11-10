@@ -1,26 +1,6 @@
 const jwt = require('jsonwebtoken');
 const ServerErr = require('../errors/server-err');
 
-/* const auth = (req, res, next) => {
-  const { authorization } = req.headers;
-
-  if (!authorization) {
-    return handleAuthError(res);
-  }
-  const token = authorization.replace('Bearer ', '');
-  let payload;
-
-  try {
-    payload = jwt.verify(token, 'some-secret-key');
-  } catch (err) {
-    return handleAuthError(res);
-  }
-
-  req.user = payload;
-
-  next();
-}; */
-
 module.exports = (req, res, next) => {
   let payload;
   try {

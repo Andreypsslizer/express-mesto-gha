@@ -8,9 +8,11 @@ const {
 } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const { validateLogin, validateCreateUser } = require('./middlewares/validateUser');
+const errorHandler = require('./middlewares/error');
 
 const app = express();
 app.use(express.json());
+app.use(errorHandler);
 
 mongoose
   .connect('mongodb://localhost:27017/mestodb')

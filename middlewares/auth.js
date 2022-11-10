@@ -1,14 +1,8 @@
 const jwt = require('jsonwebtoken');
-const { ERRORS } = require('../utils/constants');
-
-const handleAuthError = (res) => {
-  res
-    .status(ERRORS.ERROR_500.CODE)
-    .send({ message: ERRORS.ERROR_500.MESSAGE });
-};
+const ServerErr = require('../errors/server-err');
 
 /* const auth = (req, res, next) => {
-  const { authorization } = req.cookies;
+  const { authorization } = req.headers;
 
   if (!authorization) {
     return handleAuthError(res);
@@ -24,28 +18,20 @@ const handleAuthError = (res) => {
 
   req.user = payload;
 
-  return next();
+  next();
 }; */
 
-const auth = (req, res, next) => {
-  const { authorization } = req.headers;
-
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    return handleAuthError(res);
-  }
-
-  const token = authorization.replace('Bearer ', '');
+module.exports = (req, res, next) => {
   let payload;
-
   try {
+    const token = req.headers.authorization.split(' ')[1];
+    if (!token) {
+      return next(new ServerErr('Необходима авторизация'));
+    }
     payload = jwt.verify(token, 'some-secret-key');
-  } catch (err) {
-    return handleAuthError(res);
+  } catch (e) {
+    return next(new ServerErr('Необходима авторизация'));
   }
-
-  req.user = payload; // записываем пейлоуд в объект запроса
-
-  next(); // пропускаем запрос дальше
+  req.user = payload;
+  next();
 };
-
-module.exports = auth;

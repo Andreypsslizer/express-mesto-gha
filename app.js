@@ -19,8 +19,9 @@ mongoose
 
 app.post('/signin', validateLogin, login);
 app.post('/signup', validateCreateUser, createUser);
-app.use('/users', auth, usersRouter);
-app.use('/cards', auth, cardsRouter);
+app.use(auth);
+app.use('/users', usersRouter);
+app.use('/cards', cardsRouter);
 app.use('*', (req, res) => res.status(404).send({ message: '404 — Запрашиваемый ресурс не найден' }));
 
 app.listen(3000, () => {

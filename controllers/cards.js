@@ -8,9 +8,9 @@ const getCards = (req, res, next) => {
     .then((cards) => res.send(cards))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new ServerError('Ошибка сервера'));
+        next(new ServerError('Ошибка сервера'));
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -21,15 +21,14 @@ const createCard = (req, res, next) => {
     .then((newCard) => res.send(newCard))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError('Переданы некорректные данные'));
       }
-      return next(err);
+      next(err);
     });
 };
 
 const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
-    .orFail(new Error('notValidId'))
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
         throw new NotAuthorizedError('Нет доступа к удалению данной карточки');
@@ -38,9 +37,9 @@ const deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Переданы некорректные данные (id)'));
+        next(new BadRequestError('Переданы некорректные данные (id)'));
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -50,13 +49,12 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .orFail(new Error('notValidId'))
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Переданы некорректные данные (id)'));
+        next(new BadRequestError('Переданы некорректные данные (id)'));
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -68,13 +66,12 @@ const dislikeCard = (req, res, next) => {
     },
     { new: true },
   )
-    .orFail(new Error('notValidId'))
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Переданы некорректные данные (id)'));
+        next(new BadRequestError('Переданы некорректные данные (id)'));
       }
-      return next(err);
+      next(err);
     });
 };
 

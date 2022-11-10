@@ -11,21 +11,20 @@ const getUsers = (req, res, next) => {
     .then((users) => res.send(users))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new ServerError('Ошибка сервера'));
+        next(new ServerError('Ошибка сервера'));
       }
-      return next(err);
+      next(err);
     });
 };
 
 const getUser = (req, res, next) => {
   User.findById(req.params.userId)
-    .orFail(new Error('notValidId'))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Некорректный id пользователя'));
+        next(new BadRequestError('Некорректный id пользователя'));
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -53,12 +52,12 @@ const createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Введены некорректные данные'));
+        next(new BadRequestError('Введены некорректные данные'));
       }
       if (err.code === 11000) {
-        return next(new RegistratedError('Пользователь с указанным email уже зарегистрирован'));
+        next(new RegistratedError('Пользователь с указанным email уже зарегистрирован'));
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -94,13 +93,12 @@ const updateUser = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(new Error('notValidId'))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Введены некорректные данные'));
+        next(new BadRequestError('Введены некорректные данные'));
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -116,13 +114,12 @@ const updateUserAvatar = (req, res, next) => {
       runValidators: true,
     },
   )
-    .orFail(new Error('notValidId'))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('Введены некорректные данные'));
+        next(new BadRequestError('Введены некорректные данные'));
       }
-      return next(err);
+      next(err);
     });
 };
 

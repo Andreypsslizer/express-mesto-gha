@@ -12,8 +12,9 @@ const getUsers = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new ServerError('Ошибка сервера'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -23,8 +24,9 @@ const getUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Некорректный id пользователя'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -56,8 +58,9 @@ const createUser = (req, res, next) => {
       }
       if (err.code === 11000) {
         next(new RegistratedError('Пользователь с указанным email уже зарегистрирован'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -97,8 +100,9 @@ const updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Введены некорректные данные'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
@@ -118,8 +122,9 @@ const updateUserAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Введены некорректные данные'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 

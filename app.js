@@ -1,4 +1,4 @@
-const router = require('express').Router(routerconst express = require('express');
+const express = require('express');
 const mongoose = require('mongoose');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
@@ -17,11 +17,10 @@ mongoose
   .then(() => console.log('DB OK'))
   .catch((error) => console.log(`DB Error: ${error}`));
 
-router.post('/signin', validateLogin, login);
-router.post('/signup', validateCreateUser, createUser);
-router.use('/users', auth, usersRouter);
-router.use('/cards', auth, cardsRouter);
-app.use(router)
+app.post('/signin', validateLogin, login);
+app.post('/signup', validateCreateUser, createUser);
+app.use('/users', auth, usersRouter);
+app.use('/cards', auth, cardsRouter);
 app.use('*', (req, res) => res.status(404).send({ message: '404 — Запрашиваемый ресурс не найден' }));
 
 app.listen(3000, () => {

@@ -2,6 +2,7 @@ const Card = require('../models/card');
 const BadRequestError = require('../errors/bad-request-err');
 const NotAuthorizedError = require('../errors/not-authorized-err');
 const ServerError = require('../errors/server-err');
+const NotFoundError = require('../errors/not-found-err');
 
 const getCards = (req, res, next) => {
   Card.find({})
@@ -52,6 +53,7 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
+    .orFail(new NotFoundError('Карточка с указанным id не найдена'))
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -70,6 +72,7 @@ const dislikeCard = (req, res, next) => {
     },
     { new: true },
   )
+    .orFail(new NotFoundError('Карточка с указанным id не найдена'))
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'CastError') {

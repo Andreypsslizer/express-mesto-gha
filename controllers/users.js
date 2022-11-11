@@ -5,6 +5,7 @@ const BadRequestError = require('../errors/bad-request-err');
 const NotAuthorizedError = require('../errors/not-authorized-err');
 const RegistratedError = require('../errors/registrated-err');
 const ServerError = require('../errors/server-err');
+const NotFoundError = require('../errors/not-found-err');
 
 const getUsers = (req, res, next) => {
   User.find({})
@@ -20,6 +21,7 @@ const getUsers = (req, res, next) => {
 
 const getUser = (req, res, next) => {
   User.findById(req.params.userId)
+    .orFail(new NotFoundError('Пользователь с указанным id не найден'))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {

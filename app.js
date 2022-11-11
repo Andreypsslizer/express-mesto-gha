@@ -13,7 +13,6 @@ const errorHandler = require('./middlewares/error');
 
 const app = express();
 app.use(express.json());
-app.use(errorHandler);
 
 mongoose
   .connect('mongodb://localhost:27017/mestodb')
@@ -26,6 +25,7 @@ app.use(auth);
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
 app.use(errors());
+app.use(errorHandler);
 app.use('*', (req, res) => res.status(404).send({ message: '404 — Запрашиваемый ресурс не найден' }));
 
 app.listen(3000, () => {

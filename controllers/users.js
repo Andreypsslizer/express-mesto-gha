@@ -30,7 +30,7 @@ const getUser = (req, res, next) => {
     });
 };
 
-const createUser = (req, res, next) => {
+/* const createUser = (req, res, next) => {
   const {
     name,
     about,
@@ -63,8 +63,35 @@ const createUser = (req, res, next) => {
       }
     });
 };
+ */
+const createUser = async (req, res, next) => {
+  try {
+    const {
+      name, about, avatar, email, password,
+    } = req.body;
+    const hash = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    });
+    res.json({
+      name: user.name, about: user.about, avatar: user.avatar, email: user.email,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      next(new RegistratedError('Пользователь с таким email уже существует'));
+    } else if (error.name === 'ValidationError') {
+      next(new BadRequestError('Переданы некорректные данные'));
+    } else {
+      next(error);
+    }
+  }
+};
 
-const login = (req, res, next) => {
+/* const login = (req, res, next) => {
   const {
     email,
     password,
@@ -88,6 +115,21 @@ const login = (req, res, next) => {
         });
     })
     .catch((e) => next(new NotAuthorizedError(`${e.message}`)));
+}; */
+
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findUserByCredentials(email, password);
+    const token = jwt.sign({ _id: user._id }, 'some-secret-key', {
+      expiresIn: '7d',
+    });
+    res.json({
+      token,
+    });
+  } catch (error) {
+    next(new NotAuthorizedError('Неправильные почта или пароль'));
+  }
 };
 
 const updateUser = (req, res, next) => {
@@ -138,7 +180,7 @@ module.exports = {
   getUsers,
   getUser,
   createUser,
+  login,
   updateUser,
   updateUserAvatar,
-  login,
 };

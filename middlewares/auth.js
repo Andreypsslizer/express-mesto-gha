@@ -4,7 +4,7 @@ const ServerErr = require('../errors/server-err');
 module.exports = (req, res, next) => {
   let payload;
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers;
     if (!token) {
       return next(new ServerErr('Необходима авторизация'));
     }

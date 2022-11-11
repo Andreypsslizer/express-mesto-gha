@@ -65,18 +65,29 @@ const createUser = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
-  const { email, password } = req.body;
-  return User.findUserByCredentials(email, password)
+  const {
+    email,
+    password,
+  } = req.body;
+
+  User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new NotAuthorizedError('Авторизация не пройдена!');
+        return Promise.reject(new Error('Неправильные почта или пароль'));
       }
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', {
-        expiresIn: '7d',
-      });
-      res.send({ token });
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new Error('Неправильные почта или пароль'));
+          }
+          const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+          if (!token) {
+            return Promise.reject(new Error('Ошибка токена'));
+          }
+          return res.status(200).send({ token });
+        });
     })
-    .catch(next);
+    .catch((e) => next(new NotAuthorizedError(`${e.message}`)));
 };
 
 const updateUser = (req, res, next) => {

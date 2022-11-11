@@ -38,7 +38,7 @@ const deleteCard = (req, res, next) => {
       if (card.owner.toString() !== req.user._id) {
         throw new NotAuthorizedError('Нет доступа к удалению данной карточки');
       }
-      return Card.findByIdAndRemove(req.params.cardId);
+      return Card.findByIdAndRemove(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {

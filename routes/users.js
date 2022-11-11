@@ -4,12 +4,13 @@ const { validateUserId, validateUpdateUser, validateAvatar } = require('../middl
 const {
   getUsers,
   getUser,
+  getMe,
   updateUser,
   updateUserAvatar,
 } = require('../controllers/users');
 
 usersRouter.get('/', getUsers);
-usersRouter.get('/me', getUser);
+usersRouter.get('/me', getMe);
 usersRouter.get('/:userId', validateUserId, getUser);
 usersRouter.patch('/me', validateUpdateUser, updateUser);
 usersRouter.patch('/me/avatar', validateAvatar, updateUserAvatar);

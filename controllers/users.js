@@ -30,6 +30,19 @@ const getUser = (req, res, next) => {
     });
 };
 
+const getMe = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: req.user._id });
+    res.json(user);
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      next(new BadRequestError('Переданы некорректные данные'));
+    } else {
+      next(error);
+    }
+  }
+};
+
 /* const createUser = (req, res, next) => {
   const {
     name,
@@ -179,6 +192,7 @@ const updateUserAvatar = (req, res, next) => {
 module.exports = {
   getUsers,
   getUser,
+  getMe,
   createUser,
   login,
   updateUser,

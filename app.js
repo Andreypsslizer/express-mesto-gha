@@ -10,6 +10,7 @@ const {
 const { validateLogin, validateCreateUser } = require('./middlewares/validateUser');
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/error');
+const NotFoundError = require('./errors/not-found-err');
 
 const app = express();
 app.use(express.json());
@@ -24,9 +25,11 @@ app.post('/signin', validateLogin, login);
 app.use(auth);
 app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
+app.use('*', () => {
+  throw new NotFoundError('Запрашиваемый ресурс не найден');
+});
 app.use(errors());
 app.use(errorHandler);
-app.use('*', (req, res) => res.status(404).send({ message: '404 — Запрашиваемый ресурс не найден' }));
 
 app.listen(3000, () => {
   console.log('App listening on port');

@@ -4,19 +4,12 @@ const User = require('../models/user');
 const BadRequestError = require('../errors/bad-request-err');
 const NotAuthorizedError = require('../errors/not-authorized-err');
 const RegistratedError = require('../errors/registrated-err');
-const ServerError = require('../errors/server-err');
 const NotFoundError = require('../errors/not-found-err');
 
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new ServerError('Ошибка сервера'));
-      } else {
-        next(err);
-      }
-    });
+    .catch(next);
 };
 
 const getUser = (req, res, next) => {
@@ -37,11 +30,7 @@ const getMe = async (req, res, next) => {
     const user = await User.findOne({ _id: req.user._id });
     res.json(user);
   } catch (error) {
-    if (error.name === 'ValidationError') {
-      next(new BadRequestError('Переданы некорректные данные'));
-    } else {
-      next(error);
-    }
+    next(error);
   }
 };
 
@@ -161,7 +150,7 @@ const updateUser = (req, res, next) => {
   )
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         next(new BadRequestError('Введены некорректные данные'));
       } else {
         next(err);
@@ -183,7 +172,7 @@ const updateUserAvatar = (req, res, next) => {
   )
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         next(new BadRequestError('Введены некорректные данные'));
       } else {
         next(err);

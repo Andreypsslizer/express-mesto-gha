@@ -1,19 +1,12 @@
 const Card = require('../models/card');
 const BadRequestError = require('../errors/bad-request-err');
 const ForbiddenError = require('../errors/forbidden-err');
-const ServerError = require('../errors/server-err');
 const NotFoundError = require('../errors/not-found-err');
 
 const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send(cards))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new ServerError('Ошибка сервера'));
-      } else {
-        next(err);
-      }
-    });
+    .catch(next);
 };
 
 const createCard = (req, res, next) => {

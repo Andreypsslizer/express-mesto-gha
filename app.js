@@ -11,6 +11,8 @@ const { validateLogin, validateCreateUser } = require('./middlewares/validateUse
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/error');
 const NotFoundError = require('./errors/not-found-err');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+const corsRequest = require('./middlewares/cors');
 
 const app = express();
 app.use(express.json());
@@ -20,6 +22,8 @@ mongoose
   .then(() => console.log('DB OK'))
   .catch((error) => console.log(`DB Error: ${error}`));
 
+app.use(requestLogger);
+app.use(corsRequest);
 app.post('/signup', validateCreateUser, createUser);
 app.post('/signin', validateLogin, login);
 app.use(auth);
@@ -28,6 +32,7 @@ app.use('/cards', cardsRouter);
 app.use('*', () => {
   throw new NotFoundError('Запрашиваемый ресурс не найден');
 });
+app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 

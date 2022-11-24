@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+// eslint-disable-next-line import/no-unresolved
+const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
@@ -22,6 +24,7 @@ mongoose
   .then(() => console.log('DB OK'))
   .catch((error) => console.log(`DB Error: ${error}`));
 
+app.use(cookieParser());
 app.use(requestLogger);
 app.use(corsRequest);
 app.post('/signup', validateCreateUser, createUser);

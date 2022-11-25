@@ -1,10 +1,10 @@
 const allowedCors = [
-  'https://project.andrei5s.nomoredomains.icu',
-  'http://project.andrei5s.nomoredomains.icu',
-  'https://api.project.andrei5s.nomoredomains.icu',
-  'http://api.project.andrei5s.nomoredomains.icu',
+  'http://domain.mesto.nomoredomains.club/',
+  'http://domain.mesto.nomoredomains.club/',
+  'http://api.domain.mesto.nomoredomains.club/',
+  'http://api.domain.mesto.nomoredomains.club/',
+  'https://localhost:3000',
   'http://localhost:3000',
-  'http://localhost:3001',
 ];
 
 const corsRequest = ((req, res, next) => {

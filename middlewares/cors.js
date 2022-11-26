@@ -1,7 +1,7 @@
 const allowedCors = [
+  'https://domain.mesto.nomoredomains.club',
   'http://domain.mesto.nomoredomains.club',
-  'http://domain.mesto.nomoredomains.club',
-  'http://api.domain.mesto.nomoredomains.club',
+  'https://api.domain.mesto.nomoredomains.club',
   'http://api.domain.mesto.nomoredomains.club',
   'https://localhost:3000',
   'http://localhost:3000',
